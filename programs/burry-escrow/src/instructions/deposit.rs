@@ -8,14 +8,16 @@ use anchor_lang::solana_program::{
 pub fn deposit_handler(ctx: Context<Deposit>, escrow_amount: u64, unlock_price: f64) -> Result<()> {
     msg!("Depositing funds in escrow...");
 
-    let escrow_state = &mut ctx.accounts.escrow_account;
-    escrow_state.unlock_price = unlock_price;
-    escrow_state.escrow_amount = escrow_amount;
+    ctx.accounts.escrow_account.set_inner(EscrowState {
+        unlock_price,
+        escrow_amount,
+        bump: ctx.bumps.escrow_account,
+    });
 
 
     let transfer_ix = transfer(
         &ctx.accounts.user.key(),
-        &escrow_state.key(),
+        &ctx.accounts.escrow_account.key(),
         escrow_amount
     );
 
@@ -44,7 +46,7 @@ pub struct Deposit<'info> {
         seeds = [ESCROW_SEED, user.key().as_ref()],
         bump,
         payer = user,
-        space = std::mem::size_of::<EscrowState>() + 8
+        space = EscrowState::INIT_SPACE + 8
     )]
     pub escrow_account: Account<'info, EscrowState>,
 

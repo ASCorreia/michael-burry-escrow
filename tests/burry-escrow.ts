@@ -43,7 +43,7 @@ describe("burry-escrow", () => {
         amountToLockUp, 
         failUnlockPrice
       )
-      .accounts({
+      .accountsPartial({
         user: payer.publicKey,
         escrowAccount: escrowState,
         systemProgram: anchor.web3.SystemProgram.programId
@@ -80,7 +80,7 @@ describe("burry-escrow", () => {
     
     // send tx
     const tx = await program.methods.withdraw()
-    .accounts({
+    .accountsPartial({
       user: payer.publicKey,
       escrowAccount: escrowState,
       feedAggregator: solUsedSwitchboardFeed,
@@ -133,7 +133,7 @@ describe("burry-escrow", () => {
         amountToLockUp, 
         failUnlockPrice
       )
-      .accounts({
+      .accountsPartial({
         user: payer.publicKey,
         escrowAccount: escrowState,
         systemProgram: anchor.web3.SystemProgram.programId
@@ -174,7 +174,7 @@ describe("burry-escrow", () => {
     // send tx
     try {
       const tx = await program.methods.withdraw()
-      .accounts({
+      .accountsPartial({
         user: payer.publicKey,
         escrowAccount: escrowState,
         feedAggregator: solUsedSwitchboardFeed,
