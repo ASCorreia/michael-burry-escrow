@@ -2,7 +2,7 @@ use crate::state::*;
 use crate::errors::*;
 use std::str::FromStr;
 use anchor_lang::prelude::*;
-use switchboard_v2::{AggregatorAccountData, SwitchboardDecimal};
+use switchboard_solana::{AggregatorAccountData, SwitchboardDecimal};
 use anchor_lang::solana_program::clock::Clock;
 
 pub fn withdraw_handler(ctx: Context<Withdraw>, params: WithdrawParams) -> Result<()> {
@@ -65,7 +65,7 @@ pub struct Withdraw<'info> {
     #[account(
         mut,
         seeds = [ESCROW_SEED, user.key().as_ref()],
-        bump,
+        bump = escrow_account.bump,
         close = user
     )]
     pub escrow_account: Account<'info, EscrowState>,
